@@ -1,0 +1,47 @@
+classDiagram
+    direction TB
+
+    class CarPart {
+        <<interface>>
+        +get_name() String
+        +get_weight() int
+        +accumulate_weight(accumulator: WeightAccumulator) void
+    }
+
+    class SimplePart {
+        -name: String
+        -weight: int
+        +SimplePart(name: String, weight: int)
+        +get_name() String
+        +get_weight() int
+        +accumulate_weight(accumulator: WeightAccumulator) void
+    }
+
+    class CompositePart {
+        -name: String
+        -parts: List~CarPart~
+        +CompositePart(name: String)
+        +add_part(part: CarPart) void
+        +get_name() String
+        +get_weight() int
+        +accumulate_weight(accumulator: WeightAccumulator) void
+    }
+
+    class WeightAccumulator {
+        -total_weight: int
+        +add(part_name: String, part_weight: int) void
+        +get_total_weight() int
+    }
+
+    class Main {
+        +main(args: String[])$ void
+    }
+
+    SimplePart ..|> CarPart : implementa
+    CompositePart ..|> CarPart : implementa
+    CompositePart o-- CarPart : parts 0..*
+    CarPart ..> WeightAccumulator : usa
+    SimplePart ..> WeightAccumulator : add()
+    Main ..> CompositePart : cria
+    Main ..> SimplePart : cria
+    Main ..> WeightAccumulator : cria
